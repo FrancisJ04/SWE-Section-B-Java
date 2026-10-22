@@ -30,3 +30,6 @@ jobs:
 
       - name: Enforce coding standards
         run: mvn -B checkstyle:check
+
+      - name: Compile project
+        run: mvn -B compile
