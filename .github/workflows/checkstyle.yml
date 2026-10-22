@@ -1,0 +1,32 @@
+name: Checkstyle
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  checkstyle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Generate Checkstyle HTML report
+        run: mvn -B checkstyle:checkstyle
+
+      - name: Upload Checkstyle report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: checkstyle-report
+          path: target/reports/
+
+      - name: Enforce coding standards
+        run: mvn -B checkstyle:check
